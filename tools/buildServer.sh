@@ -12,7 +12,7 @@ SCRIPTPATH=$(cd $rw && pwd )
 
 cur_git_branch() {
   curBranch=`git branch | grep "*"`
-  echo "You are not checkout in branch ${curBranch/* /}"
+  echo "You are now checkout in branch ${curBranch/* /}"
 }
 
 #获取当前分支#
@@ -47,7 +47,8 @@ init_gradles_config(){
     echo "buildPath=$path/gradles/$name/*/app/" >> ~/$config
 
 	$SCRIPTPATH/loginssh.sh "cd $path && mkdir -p gradles && cd gradles && rm -rf $name && mkdir -p $name \
-	&& cd $name && git clone $gitRepo && cp $path/gradles/local.properties $path/gradles/$name/*/ && exit"
+	&& cd $name && git clone $gitRepo && cp $path/gradles/local.properties $path/gradles/$name/*/ && chmod +x gradlew \
+	&& exit"
 }
 
 #配置文件初始化
@@ -60,7 +61,7 @@ source ~/$config
 
 #远程连接创建并切换到当前分支-新代码拉取-执行新一轮的编译命令#
 $SCRIPTPATH/loginssh.sh "cd $path/gradles/$name && cd */ && git fetch && git checkout origin/${curBranch/* /} -b ${curBranch/* /} \
-&& git pull && rm -rf ./build/outputs/apk/ && mkdir -p build/outputs/apk/ && chmod +x gradlew && exit"
+&& git pull && rm -rf ./build/outputs/apk/ && mkdir -p build/outputs/apk/ && exit"
 
 #执行远程的Clean命令#
 $SCRIPTPATH/loginssh.sh "cd $path/gradles/$name && cd */ && ./gradlew clean"
