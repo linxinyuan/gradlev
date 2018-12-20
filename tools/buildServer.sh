@@ -1,5 +1,5 @@
 #! /bin/sh
-config=".gradlesConfig"
+config=".gradlevConfig"
 startTime=`date +%s`
 cd ~
 home=`pwd`
@@ -47,8 +47,8 @@ init_gradles_config(){
     echo "buildPath=$path/gradles/$name/*/app/" >> ~/$config
 
 	$SCRIPTPATH/loginssh.sh "cd $path && mkdir -p gradles && cd gradles && rm -rf $name && mkdir -p $name \
-	&& cd $name && git clone $gitRepo && cp $path/gradles/local.properties $path/gradles/$name/*/ && chmod +x gradlew \
-	&& exit"
+	&& cd $name && git clone $gitRepo && cp $path/gradles/local.properties $path/gradles/$name/*/ \
+	&& chmod +x $path/gradles/$name/*/gradlew && exit"
 }
 
 #配置文件初始化
