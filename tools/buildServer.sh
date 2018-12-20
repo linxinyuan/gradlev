@@ -18,6 +18,12 @@ cur_git_branch() {
 #获取当前分支#
 cur_git_branch
 
+#配置全局常量#
+gitRepo="git@github.com:linxinyuan/LoggerSystem.git"
+serverName="linxinyuan@192.168.24.199"
+password="linxinyuan"
+path="/build"
+
 init_gradles_config(){
     chmod +x $SCRIPTPATH/loginssh.sh 
     chmod +x $SCRIPTPATH/scp.sh
@@ -28,19 +34,19 @@ init_gradles_config(){
     echo "name=$name" > ~/$config
 
 	#Git仓库地址-git@github.com:linxinyuan/LoggerSystem.git#
-    read -p "please input git repositories to sync code: "  gitRepo
+    #read -p "please input git repositories to sync code: "  gitRepo
     echo "gitRepo=$gitRepo" >> ~/$config
 	
 	#远程服务器地址-linxinyuan@192.168.24.199#
-    read -p "please input server's 'user@host' : "  serverName
+    #read -p "please input server's 'user@host' : "  serverName
     echo "serverName=$serverName" >> ~/$config
 
 	#远程服务器登录密码-linxinyuan#
-    read -p "please input server's password: "  password
+    #read -p "please input server's password: "  password
     echo "password=$password" >> ~/$config
 
 	#服务器编译空间-/build#
-    read -p "please input server's path to build: "  path
+    #read -p "please input server's path to build: "  path
     echo "path=$path" >> ~/$config
 
 	#项目编译地址#
