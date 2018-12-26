@@ -14,11 +14,9 @@
 1. 安装
 执行下面的命令：
 ```
-$ git clone git@github.com:linxinyuan/gradlev.git
-$ cd gradlev
-$ echo "export PATH=$(pwd)/:\$PATH" >>~/.bash_profile
-$ echo "$(pwd)/tools/buildServer.sh" >>gradlev
-$ source ~/.bash_profile
+$ git clone git@github.com:linxinyuan/gradlev.git #检出脚本远程仓
+$ cd gradlev #切换到gradlev主目录
+$ ./ginit.sh #配置项写入与脚本格式化
 ```
 2.  初始化
 进入Android 项目的根目录，执行
@@ -29,7 +27,6 @@ please input your name: linxinyuan #个人编译空间-/build/$name，重配置�
 please input git repositories to sync code: git@XXX #Git仓库地址-git@github.com:linxinyuan/LoggerSystem.git#
 please input server's 'user@host' : root@192.168.1.1 #远程服务器地址-linxinyuan@192.168.24.199#
 please input server's password: 123456 #远程服务器登录密码-linxinyuan#
-please input server's path to build: /build #服务器编译空间-/build#
 ```
 3.  使用
 至此，可以像使用gradlew一样来使用gradlev了，比如
@@ -37,6 +34,14 @@ please input server's path to build: /build #服务器编译空间-/build#
 $ gradlev
 
 ```
-编译完的apk放于当前工程根目录的```build/outputs/apk/```
+4.  重置
+如果在步骤3的时候设置错误或者中途退出了，需要切换到gradlev主目录并执行脚本，比如
+```
+$ ./greset.sh
+
+```
+然后重新从第2步骤重新设置编译参数
+
+编译完的apk放于本地当前工程根目录的```build/outputs/apk/```
 
 >如果有问题，欢迎提issue；如果觉得不错，欢迎star
