@@ -1,5 +1,6 @@
 #! /bin/sh
 config=".gradlevConfig"
+gitBranch=".gradlevBranch"
 startTime=`date +%s`
 cd ~
 home=`pwd`
@@ -10,19 +11,25 @@ rw=`dirname $0`
 
 SCRIPTPATH=$(cd $rw && pwd )
 
-cur_git_branch() {
-  curBranch=`git branch | grep "*"`
-  echo "You are now checkout in branch ${curBranch/* /}"
-}
-
-#获取当前分支#
-cur_git_branch
-
-#配置全局常量#
+#配置shell局部常量#
 #gitRepo="git@github.com:linxinyuan/LoggerSystem.git"
 #serverName="linxinyuan@192.168.24.199"
 #password="linxinyuan"
+branchDiff=false
 path="/build"
+
+cur_git_branch() {
+  curBranch=`git branch | grep "*"`
+  echo "You are now checkout in branch ${curBranch/* /}"
+
+  source ~/$gitBranch
+  #如果不同变为false-后续要执行clean命令#
+  if [[ ${curBranch/* /} != $buildBranch ]]; then
+      branchDiff=true
+  fi
+
+  echo "buildBranch=${curBranch/* /}" > ~/$gitBranch
+}
 
 init_gradlev_config(){
     chmod +x $SCRIPTPATH/loginssh.sh 
@@ -76,22 +83,37 @@ then
  	init_gradlev_config
 fi
 
+#配置生效#
 source ~/$config
 
-#远程连接创建并切换到当前分支-新代码拉取-保存上次改动现场#
-#先尝试进行本地的分支切换，失败则直接从远程分支检出新分支#
+#获取当前分支#
+cur_git_branch
+
+echo "## 上次完成打包分支~$buildBranch ##"
+echo "## 本次准备打包分支~${curBranch/* /} ##"
+echo "## 是否需要进行Gradle-clean操作~$branchDiff ##"
+
+#尝试重新拉取远程分支,成功-本地不存在该远程分支副本,失败-本地存在该远程分支副本#
+$SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && git fetch && git stash \
+&& git checkout origin/${curBranch/* /} && exit"
+
+#进行分支切换,上一步失败直接切换分支,上一步失败则变成无效操作#
+$SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && git stash \
+&& git checkout ${curBranch/* /} && exit"
+
 #新分支拉取或者切换进行local与gradle.p文件的覆盖添加#
 #拉取新代码并删除apk文件夹用于重新编译#
 #完成分支切换任务并退出#
-$SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && git fetch && git stash \
-&& git checkout ${curBranch/* /} || git checkout origin/${curBranch/* /} && git pull \
+$SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && git pull \
 && cp -rf $path/gradlev/gradle.properties $path/gradlev/$name/*/ \
 && cp -rf $path/gradlev/local.properties $path/gradlev/$name/*/ \
 && rm -rf ./build/outputs/apk/ && mkdir -p build/outputs/apk/ \
 && exit"
 
-#执行远程的Clean命令#
-#$SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && ./gradlew clean"
+#执行远程的Clean命令-是否切换了分支#
+if [ $branchDiff = 'true' ]; then
+    $SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && ./gradlew clean"
+fi
 
 #执行远程的Build命令执行Debug包编译#
 $SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && ./gradlew assembleDebug"
@@ -99,10 +121,15 @@ $SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && ./gradlew assembleDe
 #切换到master-本地切换分支删除#
 #$SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && git checkout master && git branch -D ${curBranch/* /} && exit"
 
-#远程Apk包拷贝到本地#
-##$SCRIPTPATH/scp.sh $serverName $password $port $buildPath "app/build/outputs/"
+#删除原来的apk存放文件夹
+rm -rf app/build/outputs/apk
+#创建一个新的apk文件夹用于远程传输
+mkdir app/build/outputs/apk
 
-##adb install -r app/build/outputs/app-debug.apk
+#远程Apk包拷贝到本地#
+$SCRIPTPATH/scp.sh $serverName $password $port $buildPath "app/build/outputs/apk"
+
+#adb install -r `pwd`/app/build/outputs/app-debug.apk
 
 endTime=`date +%s`
 useTime=`expr $endTime - $startTime`
