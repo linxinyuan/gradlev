@@ -7,7 +7,7 @@ set port [lindex $argv 2]
 set buildPath [lindex $argv 3]
 set proPath [lindex $argv 4]
 
-spawn scp -P $port -rv $name:$buildPath/build/outputs/apk $proPath
+spawn scp -P $port -rv $name:$buildPath/build/outputs/apk/* $proPath
 
 expect "password:"
 send "$password\r"

@@ -71,8 +71,10 @@ init_gradlev_config(){
 	$SCRIPTPATH/loginssh.sh "cd $path && mkdir -p gradlev && cd gradlev \
 	&& rm -rf $name && mkdir -p $name && cd $name && git clone $gitRepo \
 	&& chmod +x $path/gradlev/$name/*/gradlew \
+	&& cp -rf $path/gradlev/release-app-build.gradle $path/gradlev/$name/*/build-config \
 	&& cp -rf $path/gradlev/gradle.properties $path/gradlev/$name/*/ \
 	&& cp -rf $path/gradlev/local.properties $path/gradlev/$name/*/ \
+	&& cp -rf $path/gradlev/build.gradle $path/gradlev/$name/*/ \
 	&& exit"
 
 	#写入原始分支master进入配置文件
@@ -102,15 +104,18 @@ $SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && git fetch && git sta
 
 #进行分支切换,上一步失败直接切换分支,上一步失败则变成无效操作#
 $SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && git stash \
-&& git checkout ${curBranch/* /} && exit"
+&& git checkout ${curBranch/* /} \
+&& cp -rf $path/gradlev/release-app-build.gradle $path/gradlev/$name/*/build-config \
+&& cp -rf $path/gradlev/gradle.properties $path/gradlev/$name/*/ \
+&& cp -rf $path/gradlev/local.properties $path/gradlev/$name/*/ \
+&& cp -rf $path/gradlev/build.gradle $path/gradlev/$name/*/ \
+&& exit"
 fi
 
 #新分支拉取或者切换进行local与gradle.p文件的覆盖添加#
 #拉取新代码并删除apk文件夹用于重新编译#
 #完成分支切换任务并退出#
 $SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && git pull \
-&& cp -rf $path/gradlev/gradle.properties $path/gradlev/$name/*/ \
-&& cp -rf $path/gradlev/local.properties $path/gradlev/$name/*/ \
 && rm -rf ./build/outputs/apk/ && mkdir -p build/outputs/apk/ \
 && exit"
 
