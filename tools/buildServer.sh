@@ -128,9 +128,9 @@ fi
 $SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && ./gradlew assembleDebug"
 
 #删除原来的apk存放文件夹
-rm -rf app/build/outputs/apk
+#rm -rf app/build/outputs/apk
 #创建一个新的apk文件夹用于远程传输
-mkdir app/build/outputs/apk
+#mkdir app/build/outputs/apk
 
 #远程Apk包拷贝到本地#
 $SCRIPTPATH/scp.sh $serverName $password $port $buildPath "app/build/outputs/apk"
@@ -138,7 +138,12 @@ $SCRIPTPATH/scp.sh $serverName $password $port $buildPath "app/build/outputs/apk
 #改变最后一次打包的标志位#
 echo "buildBranch=${curBranch/* /}" > ~/$gitBranch
 
-#adb install -r `pwd`/app/build/outputs/app-debug.apk
+#Cygwin路径转化为windows绝对路径
+proHome=`pwd`
+appPath=`cygpath -p $proHome/app/build/outputs/apk/app-debug.apk -a -w`
+
+#执行adb命令安装
+adb install -r ${appPath}
 
 endTime=`date +%s`
 useTime=`expr $endTime - $startTime`
