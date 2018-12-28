@@ -129,8 +129,8 @@ $SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && ./gradlew assembleDe
 
 #删除原来的apk存放文件夹
 #rm -rf app/build/outputs/apk
-#创建一个新的apk文件夹用于远程传输
-#mkdir app/build/outputs/apk
+#尝试创建一个新的apk文件夹用于远程传输
+mkdir -p app/build/outputs/apk
 
 #远程Apk包拷贝到本地#
 $SCRIPTPATH/scp.sh $serverName $password $port $buildPath "app/build/outputs/apk"
