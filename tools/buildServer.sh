@@ -1,7 +1,6 @@
 #! /bin/sh
 config=".gradlevConfig"
 gitBranch=".gradlevBranch"
-startTime=`date +%s`
 cd ~
 home=`pwd`
 cd -
@@ -119,6 +118,9 @@ $SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && git pull \
 && rm -rf ./build/outputs/apk/ && mkdir -p build/outputs/apk/ \
 && exit"
 
+echo "###################### Start Gradle Build ########################"
+startTime=`date +%s`
+
 #执行远程的Clean命令-是否切换了分支#
 if [ $branchDiff = 'true' ]; then
     $SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && ./gradlew clean"
@@ -127,6 +129,17 @@ fi
 #执行远程的Build命令执行Debug包编译#
 $SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && ./gradlew assembleDebug"
 
+endTime=`date +%s`
+echo "###################### Finish Gradle Build ########################"
+useTime=`expr $endTime - $startTime`
+min=`expr $useTime / 60`
+sec=`expr $useTime % 60`
+#gradlew assembleDebug执行时长打印#
+echo "服务器当前编译分支:$curBranch"
+echo "服务器完成本次编译总耗时:${min}分${sec}秒"
+date "+%Y-%m-%d %H:%M:%S"
+
+echo "######################## Start Apk Download ########################"
 #删除原来的apk存放文件夹
 #rm -rf app/build/outputs/apk
 #尝试创建一个新的apk文件夹用于远程传输
@@ -134,21 +147,15 @@ mkdir -p app/build/outputs/apk
 
 #远程Apk包拷贝到本地#
 $SCRIPTPATH/scp.sh $serverName $password $port $buildPath "app/build/outputs/apk"
+echo "######################## Apk Download Complete ########################"
 
 #改变最后一次打包的标志位#
 echo "buildBranch=${curBranch/* /}" > ~/$gitBranch
 
 #Cygwin路径转化为windows绝对路径
-proHome=`pwd`
-appPath=`cygpath -p $proHome/app/build/outputs/apk/app-debug.apk -a -w`
+#proHome=`pwd`
+#ln -s $proHome/app/build/outputs/apk /usr/bin/open
+#appPath=`cygpath -p $proHome/app/build/outputs/apk/app-debug.apk -a -w`
 
 #执行adb命令安装
-adb install -r ${appPath}
-
-endTime=`date +%s`
-useTime=`expr $endTime - $startTime`
-min=`expr $useTime / 60`
-sec=`expr $useTime % 60`
-#gradlew assembleDebug执行时长打印#
-echo "ServerBuildTime:${min}分${sec}秒"
-date "+%Y-%m-%d %H:%M:%S"
+#adb install -r ${appPath}
