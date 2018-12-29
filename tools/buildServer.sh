@@ -118,13 +118,24 @@ $SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && git pull \
 && rm -rf ./build/outputs/apk/ && mkdir -p build/outputs/apk/ \
 && exit"
 
-echo "###################### Start Gradle Build ########################"
-startTime=`date +%s`
-
 #执行远程的Clean命令-是否切换了分支#
 if [ $branchDiff = 'true' ]; then
     $SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && ./gradlew clean"
 fi
+
+while getopts "c" opt; do
+  case $opt in
+    c)
+      $SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && ./gradlew clean"
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG"
+      ;;
+  esac
+done
+
+echo "###################### Start Gradle Build ########################"
+startTime=`date +%s`
 
 #执行远程的Build命令执行Debug包编译#
 $SCRIPTPATH/loginssh.sh "cd $path/gradlev/$name && cd */ && ./gradlew assembleDebug"
@@ -138,6 +149,7 @@ sec=`expr $useTime % 60`
 echo "服务器当前编译分支:$curBranch"
 echo "服务器完成本次编译总耗时:${min}分${sec}秒"
 date "+%Y-%m-%d %H:%M:%S"
+
 
 echo "######################## Start Apk Download ########################"
 #删除原来的apk存放文件夹
