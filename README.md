@@ -27,21 +27,27 @@ please input your name: linxinyuan #个人编译空间-/build/$name，重配置�
 please input git repositories to sync code: git@XXX #Git仓库地址-git@github.com:linxinyuan/LoggerSystem.git#
 please input server's 'user@host' : root@192.168.1.1 #远程服务器地址-linxinyuan@192.168.24.199#
 please input server's password: 123456 #远程服务器登录密码-linxinyuan#
+please input server's port: 22 #远程服务器登录端口-22#
 ```
 3.  使用
 至此，可以像使用gradlew一样来使用gradlev了，比如
 ```
+##直接编译##
 $ gradlev
+
+##执行clean操作并编译##
+$ gradlev -c 
 
 ```
 4.  重置
 如果在步骤3的时候设置错误或者中途退出了，需要切换到gradlev主目录并执行脚本，比如
 ```
-$ ./greset.sh
+##谨慎执行此脚本，重新init需要重新拉取一次远程仓库代码##
+$ ./greset.sh 
 
 ```
 然后重新从第2步骤重新设置编译参数
 
-编译完的apk放于本地当前工程根目录的```build/outputs/apk/```
+编译完的apk放于本地当前工程根目录的```build/outputs/apk/```，可使用adb命令直接安装
 
 >如果有问题，欢迎提issue；如果觉得不错，欢迎star
