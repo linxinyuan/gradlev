@@ -87,11 +87,11 @@ then
  	init_gradlev_config
 fi
 
-#获取当前分支#
-cur_git_branch
-
 source ~/$config
 source ~/$gitBranch
+
+#获取当前分支#
+cur_git_branch
 
 echo "## 上次完成打包分支~$buildBranch ##"
 echo "## 本次准备打包分支~${curBranch/* /} ##"
