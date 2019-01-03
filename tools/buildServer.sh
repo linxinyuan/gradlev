@@ -155,6 +155,8 @@ date "+%Y-%m-%d %H:%M:%S"
 
 
 echo "######################## Start Apk Download ########################"
+#删除原来的apk存放文件夹
+rm -rf app/build/outputs/apk
 #尝试创建一个新的apk文件夹用于远程传输
 mkdir -p app/build/outputs/apk
 
