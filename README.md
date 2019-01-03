@@ -16,18 +16,16 @@
 ```
 $ git clone git@github.com:linxinyuan/gradlev.git #检出脚本远程仓
 $ cd gradlev #切换到gradlev主目录
-$ ./ginit.sh #配置项写入与脚本格式化
+$ dos2unix ginit.sh greset.sh #脚本格式转化#
+$ ./ginit.sh #执行初始化脚本#
 ```
 2.  初始化
 进入Android 项目的根目录，执行
 ```
 $ gradlev
 按照如下提示输入相关信息：
-please input your name: linxinyuan #个人编译空间-/build/$name，重配置清空重写#
-please input git repositories to sync code: git@XXX #Git仓库地址-git@github.com:linxinyuan/LoggerSystem.git#
-please input server's 'user@host' : root@192.168.1.1 #远程服务器地址-linxinyuan@192.168.24.199#
-please input server's password: 123456 #远程服务器登录密码-linxinyuan#
-please input server's port: 22 #远程服务器登录端口-22#
+please input your user name: linxinyuan #个人编译空间-/build/$name，重配置清空重写#
+please input your password: 123456 #远程服务器登录密码-linxinyuan#
 ```
 3.  使用
 至此，可以像使用gradlew一样来使用gradlev了，比如
@@ -44,6 +42,7 @@ $ gradlev -c
 ```
 ##谨慎执行此脚本，重新init需要重新拉取一次远程仓库代码##
 $ ./greset.sh 
+$ ./ginit.sh
 
 ```
 然后重新从第2步骤重新设置编译参数

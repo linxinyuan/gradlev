@@ -1,5 +1,6 @@
 #! /bin/sh
 config=".gradlevConfig"
+initial=".gradlevInitial"
 gitBranch=".gradlevBranch"
 cd ~
 home=`pwd`
@@ -9,13 +10,14 @@ myPath="$home/$config"
 #rw=`dirname $0`
 #SCRIPTPATH=$(cd $rw && pwd )
 
-#配置shell局部常量#
-#gitRepo="git@github.com:linxinyuan/LoggerSystem.git"
-#serverName="linxinyuan@192.168.24.199"
-#password="linxinyuan"
+#配置gitlab常量#
+gitRepo="git@gitlab.lizhi.fm:lizhifm/android.git"
 originBranch="master"
 branchDiff=false
+
+#配置shell局部常量#
 path="/build"
+port="12330"
 
 cur_git_branch() {
   curBranch=`git branch | grep "*"`
@@ -32,41 +34,40 @@ init_gradlev_config(){
     chmod +x $depotPath/scp.sh
     chmod +x $depotPath/spawnssh.sh
 
-	#个人编译空间-/build/$name，重配置清空重写#
-    read -p "please input your name: "  name
+	#远程服务器登录用户名#
+    read -p "Please input your user name: "  name
     echo "name=$name" >> ~/$config
 
-	#Git仓库地址-git@github.com:linxinyuan/LoggerSystem.git#
-    read -p "please input git repositories to sync code: "  gitRepo
-    echo "gitRepo=$gitRepo" >> ~/$config
-	
-	#远程服务器地址-linxinyuan@192.168.24.199#
-    read -p "please input server's 'user@host' : "  serverName
-    echo "serverName=$serverName" >> ~/$config
-
-	#远程服务器登录密码-linxinyuan#
-    read -p "please input server's password: "  password
+    #远程服务器登录用户密码#
+    read -p "Please input your user password: "  password
     echo "password=$password" >> ~/$config
 
+    ################################################################
+
+    #远程服务器地址-linxinyuan@192.168.24.199#
+    #read -p "please input server's 'user@host' : "  serverName
+    echo "serverName=$name@192.168.6.223" >> ~/$config
+
     #远程服务器登录端口-12330#
-    read -p "please input server's port: "  port
+    #read -p "please input server's port: "  port
     echo "port=$port" >> ~/$config
 
-	#服务器编译空间-/build#
+	#Git仓库地址-git@gitlab.lizhi.fm:lizhifm/android.git#
+    #read -p "please input git repositories to sync code: "  gitRepo
+    echo "gitRepo=$gitRepo" >> ~/$config
+
+    #服务器编译空间-/build#
     #read -p "please input server's path to build: "  path
     echo "path=$path" >> ~/$config
 
 	#项目编译地址#
     echo "buildPath=$path/gradlev/$name/*/app/" >> ~/$config
 
-    #远程切换到编译主目录并尝试建立gradlev文件夹#
-    #删除用户初始化文件夹并检出远程android项目源码#
     #添加gradlew脚本的执行权限#
     #拷贝gradle.properties文件到工程下(覆盖)#
     #拷贝local.properties文件到工程下(覆盖)#
     #完成初始化并结束远程连接1#
-	$depotPath/loginssh.sh "cd $path && mkdir -p gradlev && cd gradlev \
-	    && rm -rf $name && mkdir -p $name && cd $name && git clone $gitRepo \
+	$depotPath/loginssh.sh "cd $path \
 	    && chmod +x $path/gradlev/$name/*/gradlew \
 	    && cp -rf $path/gradlev/release-app-build.gradle $path/gradlev/$name/*/build-config \
 	    && cp -rf $path/gradlev/gradle.properties $path/gradlev/$name/*/ \
@@ -78,8 +79,7 @@ init_gradlev_config(){
 	echo "buildBranch=$originBranch" > ~/$gitBranch
 }
 
-source ~/$config
-source ~/$gitBranch
+source ~/$initial
 
 #配置文件初始化
 if [ ! -e "$myPath" ]
@@ -89,6 +89,9 @@ fi
 
 #获取当前分支#
 cur_git_branch
+
+source ~/$config
+source ~/$gitBranch
 
 echo "## 上次完成打包分支~$buildBranch ##"
 echo "## 本次准备打包分支~${curBranch/* /} ##"
@@ -152,8 +155,6 @@ date "+%Y-%m-%d %H:%M:%S"
 
 
 echo "######################## Start Apk Download ########################"
-#删除原来的apk存放文件夹
-#rm -rf app/build/outputs/apk
 #尝试创建一个新的apk文件夹用于远程传输
 mkdir -p app/build/outputs/apk
 
