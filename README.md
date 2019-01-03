@@ -10,10 +10,9 @@
 >另外，使用该方法会有额外的上传代码和下载代码的消耗，使用前请确保 额外的时间+服务器编译时间<本地编译时间
 
 ## 使用方法
+## 打开桌面Cygwin-Terminate,切换到你的工作目录，依次执行下面的命令
 
 1. 安装
-##打开桌面Cygwin-Terminate,切换到你的工作目录，依次执行下面的命令
-
 执行下面的命令：
 ```
 $ git clone git@github.com:linxinyuan/gradlev.git #检出脚本远程仓
