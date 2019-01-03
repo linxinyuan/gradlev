@@ -34,19 +34,19 @@ init_gradlev_config(){
     chmod +x $depotPath/scp.sh
     chmod +x $depotPath/spawnssh.sh
 
-	#远程服务器登录用户名#
+	#指定编译空间文件夹名#
     read -p "Please input your user name: "  name
     echo "name=$name" >> ~/$config
 
-    #远程服务器登录用户密码#
+    #远程服务器登录密码#
     read -p "Please input your user password: "  password
     echo "password=$password" >> ~/$config
 
     ################################################################
 
-    #远程服务器地址-linxinyuan@192.168.24.199#
+    #远程服务器地址-lizhifm@192.168.24.199#
     #read -p "please input server's 'user@host' : "  serverName
-    echo "serverName=$name@192.168.6.223" >> ~/$config
+    echo "serverName=lizhifm@192.168.6.223" >> ~/$config
 
     #远程服务器登录端口-12330#
     #read -p "please input server's port: "  port
@@ -116,7 +116,7 @@ fi
 #拉取新代码并删除apk文件夹用于重新编译#
 #完成分支切换任务并退出#
 $depotPath/loginssh.sh "cd $path/gradlev/$name && cd */ && git pull \
-    && rm -rf ./build/outputs/apk/ && mkdir -p build/outputs/apk/ \
+    && rm -rf ./app/build/outputs/apk/ && mkdir -p ./app/build/outputs/apk/ \
     && exit"
 
 
@@ -125,10 +125,14 @@ if [ $branchDiff = 'true' ]; then
     $depotPath/loginssh.sh "cd $path/gradlev/$name && cd */ && ./gradlew clean"
 fi
 
-while getopts "c" opt; do
+#后面去除-a的选项[单模块编译需要]
+while getopts "ac" opt; do
   case $opt in
     c)
       $depotPath/loginssh.sh "cd $path/gradlev/$name && cd */ && ./gradlew clean"
+      ;;
+    a)
+      $depotPath/loginssh.sh "cp -rf $path/gradlev/runalone/release-app-build.gradle $path/gradlev/$name/*/build-config"
       ;;
     \?)
       echo "Invalid option: -$OPTARG"
