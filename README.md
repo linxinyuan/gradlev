@@ -12,6 +12,8 @@
 ## 使用方法
 
 1. 安装
+##打开桌面Cygwin-Terminate,切换到你的工作目录，依次执行下面的命令
+
 执行下面的命令：
 ```
 $ git clone git@github.com:linxinyuan/gradlev.git #检出脚本远程仓
@@ -33,7 +35,7 @@ please input your password: 123456 #远程服务器登录密码-linxinyuan#
 ##直接编译##
 $ gradlev
 
-##执行clean操作并编译##
+##手动执行clean操作并编译##
 $ gradlev -c 
 
 ```
