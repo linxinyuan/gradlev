@@ -10,23 +10,26 @@
 >另外，使用该方法会有额外的上传代码和下载代码的消耗，使用前请确保 额外的时间+服务器编译时间<本地编译时间
 
 ## 使用方法
-## 打开桌面Cygwin-Terminate,切换到你的工作目录，依次执行下面的命令
+## 打开桌面Cygwin-Terminate,切换到一个任意的空目录，准备做脚本项目的checkout，依次执行下面的命令
 
 1. 安装
 执行下面的命令：
 ```
-$ git clone git@github.com:linxinyuan/gradlev.git #检出脚本远程仓
-$ cd gradlev #切换到gradlev主目录
+$ git clone https://github.com/linxinyuan/gradlev.git #检出脚本远程仓#
+$ cd gradlev #切换到gradlev主目录#
 $ dos2unix ginit.sh greset.sh #脚本格式转化#
 $ ./ginit.sh #执行初始化脚本#
 ```
+
 2.  初始化
-进入Android 项目的根目录，执行
+进入你的荔枝 Android 项目的根目录，执行
 ```
 $ gradlev
 按照如下提示输入相关信息：
-please input your user name: linxinyuan #个人编译空间-/build/$name，重配置清空重写#
-please input your password: 123456 #远程服务器登录密码-linxinyuan#
+please input your user name: linxinyuan #你的名字缩写，例如linxinyuan#
+please input your user password: linxinyuan2019 #你的名字的缩写+2019，例如linxinyuan2019#
+
+如果你后面执行失败了，那估计是管理员没有帮你创建账号和空间，找一下天河彭于晏反馈这个问题
 ```
 3.  使用
 至此，可以像使用gradlew一样来使用gradlev了，比如
@@ -34,7 +37,7 @@ please input your password: 123456 #远程服务器登录密码-linxinyuan#
 ##直接编译##
 $ gradlev
 
-##手动执行clean操作并编译##
+##手动执行clean操作并编译，如果你编译失败的话可以试一下##
 $ gradlev -c 
 
 ```
