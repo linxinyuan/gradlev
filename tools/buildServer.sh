@@ -12,7 +12,7 @@ myPath="$home/$config"
 
 #配置gitlab常量#
 gitRepo="git@gitlab.lizhi.fm:lizhifm/android.git"
-originBranch="master"
+originBranch="init_master"
 branchDiff=false
 
 #配置shell局部常量#
