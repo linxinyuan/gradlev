@@ -17,34 +17,31 @@
 ```
 $ git clone https://github.com/linxinyuan/gradlev.git #检出脚本远程仓#
 $ cd gradlev #切换到gradlev主目录#
-$ dos2unix dos2linux.sh #脚本格式转化1#
-$ ./doslinux.sh #脚本格式转化2#
 $ ./ginit.sh #执行初始化脚本#
 ```
 
 2.  初始化
-进入你的荔枝 Android 项目的根目录，执行
+进入你的荔枝 Android 项目的根目录,进入你的荔枝 Android 项目的根目录,进入你的荔枝 Android 项目的根目录(重要的事说三次)，执行
 ```
 $ gradlev
 按照如下提示输入相关信息(只需要输入一次)：
-please input your user name: linxinyuan #你的名字缩写，例如linxinyuan#
-please input your user password: linxinyuan2019 #你的名字的缩写+2019，例如linxinyuan2019#
+please input your user space: #@林新源 申请用户编译空间#
+please input your login server password: #@林新源 获取密码#
 ```
 
 3.  使用
 至此，可以像使用gradlew一样来使用gradlev了，比如
 ```
-##直接编译##
+##直接编译(不需要点斜杠)##
 $ gradlev
 
-##手动执行clean操作并编译，如果你编译失败的话可以试一下##
+##手动执行clean操作并编译(不需要点斜杠)##
 $ gradlev -c 
 
-##单模块编译##
+##适配胡步军单模块编译分支(不需要点斜杠)##
 $ gradlev -a
 
-$ 如果你后面执行失败了，那估计是管理员没有帮你创建账号和空间，找一下管理员反馈这个问题
-$ 如果遇到其他问题未能走到编译阶段，请截图异常企业微信沟通
+$ 如果遇到其他问题未能走到编译阶段，请截图异常 @林新源 企业微信沟通
 ```
 
 4.  重置

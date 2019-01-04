@@ -15,7 +15,8 @@ gitRepo="git@gitlab.lizhi.fm:lizhifm/android.git"
 originBranch="init_master"
 branchDiff=false
 
-#配置shell局部常量#
+#配置shell局部常量-普通用户登录#
+serverName="normaluser@192.168.6.223"
 path="/build"
 port="12330"
 
@@ -35,18 +36,18 @@ init_gradlev_config(){
     chmod +x $depotPath/spawnssh.sh
 
 	#指定编译空间文件夹名#
-    read -p "Please input your user name: "  name
+    read -p "Please input your user space: "  name
     echo "name=$name" >> ~/$config
 
     #远程服务器登录密码#
-    read -p "Please input your user password: "  password
+    read -p "Please input login server password: "  password
     echo "password=$password" >> ~/$config
 
     ################################################################
 
     #远程服务器地址-lizhifm@192.168.24.199#
     #read -p "please input server's 'user@host' : "  serverName
-    echo "serverName=lizhifm@192.168.6.223" >> ~/$config
+    echo "serverName=$serverName" >> ~/$config
 
     #远程服务器登录端口-12330#
     #read -p "please input server's port: "  port
